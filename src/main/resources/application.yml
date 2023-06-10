@@ -1,0 +1,36 @@
+server:
+  port: 4444
+spring:
+  #设置不返回null字段
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    primary:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/exceedpicdb?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      username: root
+      password: root1234
+    secondary:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/datawei?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      username: root
+      password: root1234
+  servlet:
+    multipart:
+      # 单个文件大小为10MB
+      max-file-size: 10MB
+      # 总上传的数据大小10MB
+      max-request-size: 10MB
+
+
+# mybatis配置
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.wsw.exceedpic
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath:mappers/*.xml
+
+
+logging:
+  level:
+    com.woxueit.boot.redis.redpacket.mapper: debug

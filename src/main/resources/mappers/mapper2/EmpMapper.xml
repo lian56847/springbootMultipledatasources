@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phan.springbootdemo.mapper.mapper2.EmpMapper">
+
+    <resultMap type="com.phan.springbootdemo.entity.Emp" id="EmpResult">
+        <result property="EMPNO"    column="EMPNO"    />
+        <result property="ENAME"    column="ENAME"    />
+        <result property="JOB"    column="JOB"    />
+        <result property="MGR"    column="MGR"    />
+        <result property="HIREDATE"    column="HIREDATE"    />
+        <result property="SAL"    column="SAL"    />
+        <result property="COMM"    column="COMM"    />
+        <result property="DEPTNO"    column="DEPTNO"    />
+    </resultMap>
+
+    <sql id="selectEmpVo">
+        select EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO from emp
+    </sql>
+
+    <select id="selectEmpList"   resultMap="EmpResult">
+        <include refid="selectEmpVo"/>
+        <where>
+            <if test="ENAME != null  and ENAME != ''"> and ENAME like concat('%', #{ENAME}, '%')</if>
+            <if test="JOB != null  and JOB != ''"> and JOB = #{JOB}</if>
+            <if test="MGR != null "> and MGR = #{MGR}</if>
+            <if test="HIREDATE != null "> and HIREDATE = #{HIREDATE}</if>
+            <if test="SAL != null "> and SAL = #{SAL}</if>
+            <if test="COMM != null "> and COMM = #{COMM}</if>
+            <if test="DEPTNO != null "> and DEPTNO = #{DEPTNO}</if>
+        </where>
+    </select>
+
+    <select id="selectEmpByEMPNO"   resultMap="EmpResult">
+        <include refid="selectEmpVo"/>
+        where EMPNO = #{EMPNO}
+    </select>
+
+    <insert id="insertEmp" parameterType="com.phan.springbootdemo.entity.Emp" useGeneratedKeys="true" keyProperty="EMPNO">
+        insert into emp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ENAME != null">ENAME,</if>
+            <if test="JOB != null">JOB,</if>
+            <if test="MGR != null">MGR,</if>
+            <if test="HIREDATE != null">HIREDATE,</if>
+            <if test="SAL != null">SAL,</if>
+            <if test="COMM != null">COMM,</if>
+            <if test="DEPTNO != null">DEPTNO,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ENAME != null">#{ENAME},</if>
+            <if test="JOB != null">#{JOB},</if>
+            <if test="MGR != null">#{MGR},</if>
+            <if test="HIREDATE != null">#{HIREDATE},</if>
+            <if test="SAL != null">#{SAL},</if>
+            <if test="COMM != null">#{COMM},</if>
+            <if test="DEPTNO != null">#{DEPTNO},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEmp" parameterType="com.phan.springbootdemo.entity.Emp">
+        update emp
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ENAME != null">ENAME = #{ENAME},</if>
+            <if test="JOB != null">JOB = #{JOB},</if>
+            <if test="MGR != null">MGR = #{MGR},</if>
+            <if test="HIREDATE != null">HIREDATE = #{HIREDATE},</if>
+            <if test="SAL != null">SAL = #{SAL},</if>
+            <if test="COMM != null">COMM = #{COMM},</if>
+            <if test="DEPTNO != null">DEPTNO = #{DEPTNO},</if>
+        </trim>
+        where EMPNO = #{EMPNO}
+    </update>
+
+    <delete id="deleteEmpByEMPNO" parameterType="Long">
+        delete from emp where EMPNO = #{EMPNO}
+    </delete>
+
+    <delete id="deleteEmpByEMPNOs" parameterType="String">
+        delete from emp where EMPNO in
+        <foreach item="EMPNO" collection="array" open="(" separator="," close=")">
+            #{EMPNO}
+        </foreach>
+    </delete>
+</mapper>
